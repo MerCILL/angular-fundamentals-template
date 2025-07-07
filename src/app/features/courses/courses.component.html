@@ -1,0 +1,8 @@
+<div class="courses-container">
+  <div class="courses-main">
+    <app-courses-list [courses]="courses"></app-courses-list>
+  </div>
+  <div class="courses-sidebar" *ngIf="selectedCourse">
+    <app-course-info [course]="selectedCourse"></app-course-info>
+  </div>
+</div>

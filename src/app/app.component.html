@@ -1,23 +1,50 @@
 <app-header></app-header>
 <div class="app-root">
-  <!-- Search component -->
-  <!--<app-search></app-search>-->
+  <!-- Демонстрация компонента Info -->
+  <section class="demo-section">
+    <h2>Info Component Demo</h2>
+    <app-info 
+      title="Welcome to Course Management" 
+      text="This is a demonstration of the Info component with dynamic content.">
+    </app-info>
+  </section>
 
-  <!-- Info component -->
-  <!--<app-info></app-info>-->
+  <!-- Демонстрация компонента Button -->
+  <section class="demo-section">
+    <h2>Button Component Demo</h2>
+    <div class="button-demo">
+      <app-button buttonText="Save Course" iconName="save"></app-button>
+      <app-button buttonText="Delete" iconName="trash"></app-button>
+      <app-button buttonText="Edit" iconName="edit"></app-button>
+    </div>
+  </section>
 
-  <!-- Course Card component -->
-  <!--<app-course-card></app-course-card>-->
+  <!-- Демонстрация компонента Course Card -->
+  <section class="demo-section">
+    <h2>Course Card Component Demo</h2>
+    <app-course-card [course]="sampleCourse"></app-course-card>
+  </section>
 
-  <!-- Login Form component -->
-  <!--<app-login-form></app-login-form>-->
+  <!-- Демонстрация функциональных компонентов -->
+  <section class="demo-section">
+    <h2>Feature Components Demo</h2>
+    
+    <!-- Courses List Component -->
+    <div class="feature-demo">
+      <h3>Courses List</h3>
+      <app-courses-list [courses]="courses"></app-courses-list>
+    </div>
+    
+    <!-- Course Info Component -->
+    <div class="feature-demo">
+      <h3>Course Info</h3>
+      <app-course-info [course]="sampleCourse"></app-course-info>
+    </div>
+  </section>
 
-  <!-- Login Form component -->
-  <!--<app-registration-form></app-registration-form>-->
-
-  <!-- Login Form component -->
-  <!--<app-course-form></app-course-form>-->
-
-  <!-- Modal component -->
-  <!-- <app-modal [message]="'Message'" [title]="'Title'" [okButtonText]="'Ok'" [cancelButtonText]="'Cancel'"></app-modal> -->
+  <!-- Courses Component (главный компонент) -->
+  <section class="demo-section">
+    <h2>Main Courses Component</h2>
+    <app-courses></app-courses>
+  </section>
 </div>

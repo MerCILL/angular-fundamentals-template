@@ -1,0 +1,12 @@
+<div class="courses-list">
+  <div class="courses-list__header">
+    <h2>Available Courses</h2>
+    <app-button buttonText="Add Course" iconName="plus"></app-button>
+  </div>
+  <div class="courses-list__items">
+    <app-course-card 
+      *ngFor="let course of courses" 
+      [course]="course">
+    </app-course-card>
+  </div>
+</div>
