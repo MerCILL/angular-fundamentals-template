@@ -19,19 +19,9 @@ export class RegistrationFormComponent implements OnInit {
   ngOnInit() {
     this.registrationForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(6)]],
-      email: ['', [Validators.required, this.emailValidator]],
+      email: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
-  }
-  
-  // Custom email validator for reactive forms
-  emailValidator(control: any) {
-    if (!control.value) {
-      return null;
-    }
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const isValid = emailPattern.test(control.value);
-    return isValid ? null : { emailValidator: { value: control.value } };
   }
   
   onSubmit() {

@@ -14,7 +14,7 @@ interface Author {
   styleUrls: ['./course-form.component.scss'],
 })
 export class CourseFormComponent implements OnInit {
-  courseForm!: FormGroup;
+  courseForm: FormGroup;
   submitted = false;
   availableAuthors: Author[] = [
     { id: '1', name: 'John Doe' },
@@ -24,9 +24,7 @@ export class CourseFormComponent implements OnInit {
 
   constructor(public fb: FormBuilder, public library: FaIconLibrary) {
     library.addIconPacks(fas);
-  }
-
-  ngOnInit() {
+    
     this.courseForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required, Validators.minLength(2)]],
@@ -38,7 +36,9 @@ export class CourseFormComponent implements OnInit {
     });
   }
 
-  // Custom validator for latin letters and numbers
+  ngOnInit() {
+  }
+
   latinLettersAndNumbersValidator(control: FormControl) {
     if (!control.value) {
       return null;
