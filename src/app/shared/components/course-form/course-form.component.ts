@@ -25,26 +25,39 @@ export class CourseFormComponent implements OnInit {
   constructor(public fb: FormBuilder, public library: FaIconLibrary) {
     library.addIconPacks(fas);
     
+    // Инициализируем форму в конструкторе
     this.courseForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required, Validators.minLength(2)]],
       authors: this.fb.array([]),
       duration: ['', [Validators.required, Validators.min(0)]],
       newAuthor: this.fb.group({
-        author: ['', [Validators.minLength(2), this.latinLettersAndNumbersValidator]]
+        author: ['', [Validators.minLength(2), this.latinLettersAndNumbersValidator.bind(this)]]
       })
     });
   }
 
   ngOnInit() {
+    // Дополнительная логика инициализации, если нужна
   }
 
+  // Custom validator for latin letters and numbers
   latinLettersAndNumbersValidator(control: FormControl) {
     if (!control.value) {
       return null;
     }
     const pattern = /^[a-zA-Z0-9\s]+$/;
     return pattern.test(control.value) ? null : { latinLettersAndNumbers: true };
+  }
+
+  // Добавляем геттер для newAuthor группы
+  get newAuthorGroup() {
+    return this.courseForm.get('newAuthor') as FormGroup;
+  }
+
+  // Добавляем геттер для author контрола
+  get authorControl() {
+    return this.courseForm.get('newAuthor.author') as FormControl;
   }
 
   get authorsFormArray(): FormArray {
