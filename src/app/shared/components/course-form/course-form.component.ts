@@ -14,7 +14,7 @@ interface Author {
   styleUrls: ['./course-form.component.scss'],
 })
 export class CourseFormComponent implements OnInit {
-  courseForm: FormGroup;
+  courseForm!: FormGroup; // Add definite assignment assertion
   submitted = false;
   availableAuthors: Author[] = [
     { id: '1', name: 'John Doe' },
@@ -24,10 +24,10 @@ export class CourseFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, public library: FaIconLibrary) {
     library.addIconPacks(fas);
-    this.initForm();
+    this.initForm(); // Initialize form in constructor
   }
 
-  private initForm() {
+  private initForm(): void {
     this.courseForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required, Validators.minLength(2)]],
@@ -39,7 +39,7 @@ export class CourseFormComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     // Any initialization logic if needed
   }
 
@@ -73,19 +73,19 @@ export class CourseFormComponent implements OnInit {
     return this.availableAuthors.filter(author => !courseAuthorIds.includes(author.id));
   }
 
-  addAuthor(author: Author) {
+  addAuthor(author: Author): void {
     if (author && author.id) {
       this.authorsFormArray.push(this.fb.control(author));
     }
   }
 
-  removeAuthor(index: number) {
+  removeAuthor(index: number): void {
     if (index >= 0 && index < this.authorsFormArray.length) {
       this.authorsFormArray.removeAt(index);
     }
   }
 
-  createAuthor() {
+  createAuthor(): void {
     const authorName = this.authorControl.value;
     
     if (authorName && this.authorControl.valid) {
@@ -99,7 +99,7 @@ export class CourseFormComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.submitted = true;
     if (this.courseForm.valid) {
       const formValue = {
@@ -112,7 +112,7 @@ export class CourseFormComponent implements OnInit {
   }
 
   // Helper method to patch form values (useful for testing)
-  patchFormValue(value: any) {
+  patchFormValue(value: any): void {
     this.courseForm.patchValue(value);
   }
 }
