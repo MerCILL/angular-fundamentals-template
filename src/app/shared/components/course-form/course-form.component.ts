@@ -22,27 +22,29 @@ export class CourseFormComponent implements OnInit {
     { id: '3', name: 'Bob Johnson' }
   ];
 
-  constructor(public fb: FormBuilder, public library: FaIconLibrary) {
+  constructor(private fb: FormBuilder, public library: FaIconLibrary) {
     library.addIconPacks(fas);
-    
-    // Инициализируем форму в конструкторе
+    this.initForm();
+  }
+
+  private initForm() {
     this.courseForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required, Validators.minLength(2)]],
       authors: this.fb.array([]),
       duration: ['', [Validators.required, Validators.min(0)]],
       newAuthor: this.fb.group({
-        author: ['', [Validators.minLength(2), this.latinLettersAndNumbersValidator.bind(this)]]
+        author: ['', [Validators.required, Validators.minLength(2), this.latinLettersAndNumbersValidator]]
       })
     });
   }
 
   ngOnInit() {
-    // Дополнительная логика инициализации, если нужна
+    // Any initialization logic if needed
   }
 
   // Custom validator for latin letters and numbers
-  latinLettersAndNumbersValidator(control: FormControl) {
+  latinLettersAndNumbersValidator(control: FormControl): {[key: string]: any} | null {
     if (!control.value) {
       return null;
     }
@@ -50,14 +52,12 @@ export class CourseFormComponent implements OnInit {
     return pattern.test(control.value) ? null : { latinLettersAndNumbers: true };
   }
 
-  // Добавляем геттер для newAuthor группы
-  get newAuthorGroup() {
+  get newAuthorGroup(): FormGroup {
     return this.courseForm.get('newAuthor') as FormGroup;
   }
 
-  // Добавляем геттер для author контрола
-  get authorControl() {
-    return this.courseForm.get('newAuthor.author') as FormControl;
+  get authorControl(): FormControl {
+    return this.newAuthorGroup.get('author') as FormControl;
   }
 
   get authorsFormArray(): FormArray {
@@ -65,7 +65,7 @@ export class CourseFormComponent implements OnInit {
   }
 
   get courseAuthors(): Author[] {
-    return this.authorsFormArray.controls.map(control => control.value);
+    return this.authorsFormArray.value;
   }
 
   get availableAuthorsFiltered(): Author[] {
@@ -74,33 +74,45 @@ export class CourseFormComponent implements OnInit {
   }
 
   addAuthor(author: Author) {
-    this.authorsFormArray.push(this.fb.control(author));
+    if (author && author.id) {
+      this.authorsFormArray.push(this.fb.control(author));
+    }
   }
 
   removeAuthor(index: number) {
-    this.authorsFormArray.removeAt(index);
+    if (index >= 0 && index < this.authorsFormArray.length) {
+      this.authorsFormArray.removeAt(index);
+    }
   }
 
   createAuthor() {
-    const newAuthorControl = this.courseForm.get('newAuthor.author');
-    const newAuthorName = newAuthorControl?.value;
+    const authorName = this.authorControl.value;
     
-    if (newAuthorName && newAuthorControl?.valid) {
+    if (authorName && this.authorControl.valid) {
       const newAuthor: Author = {
         id: Date.now().toString(),
-        name: newAuthorName
+        name: authorName.trim()
       };
       
       this.availableAuthors.push(newAuthor);
-      newAuthorControl.reset();
+      this.authorControl.reset();
     }
   }
 
   onSubmit() {
     this.submitted = true;
     if (this.courseForm.valid) {
-      console.log('Form submitted:', this.courseForm.value);
+      const formValue = {
+        ...this.courseForm.value,
+        authors: this.courseAuthors
+      };
+      console.log('Form submitted:', formValue);
       // Handle form submission
     }
+  }
+
+  // Helper method to patch form values (useful for testing)
+  patchFormValue(value: any) {
+    this.courseForm.patchValue(value);
   }
 }
