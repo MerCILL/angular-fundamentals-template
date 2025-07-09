@@ -14,7 +14,7 @@ export const routes: Routes = [
   },
   {
     path: 'registration',
-    component: CoursesComponent, // Временная заглушка
+    component: CoursesComponent,
     canActivate: [NotAuthorizedGuard]
   },
   {

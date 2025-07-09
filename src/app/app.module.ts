@@ -1,3 +1,4 @@
+// app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -47,10 +48,10 @@ import { AppRoutingModule } from './app-routing.module';
     UserService,
     UserStoreService,
     
-    // Window provider for SessionStorageService
+    // Window provider for SessionStorageService (only in browser environment)
     {
       provide: 'Window',
-      useValue: window
+      useFactory: () => typeof window !== 'undefined' ? window : undefined
     },
     
     // HTTP Interceptor for token handling
