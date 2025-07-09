@@ -1,9 +1,8 @@
-// auth.service.ts
 import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SessionStorageService } from './session-storage.service';
+import { HttpClientWrapper } from '@app/services/http-client-wrapper.service';
 
 interface LoginRequest {
   email: string;
@@ -18,7 +17,7 @@ interface RegisterRequest {
 
 interface AuthResponse {
   successful: boolean;
-  result: string; // token
+  result: string; // токен
   user: any;
 }
 
@@ -31,13 +30,11 @@ export class AuthService {
   public isAuthorized$ = this.isAuthorized$$.asObservable();
 
   constructor(
-    private http: HttpClient,
+    private http: HttpClientWrapper,
     private sessionStorageService: SessionStorageService,
     @Optional() @Inject('API_URL') apiUrl?: string
   ) {
     this.apiUrl = apiUrl || 'http://localhost:4000/api';
-    
-    // Check if user is already authorized on service initialization
     const token = this.sessionStorageService.getToken();
     if (token) {
       this.isAuthorized$$.next(true);
@@ -45,9 +42,23 @@ export class AuthService {
   }
 
   login(user: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, user)
+    return this.http
+      .post<AuthResponse>(`${this.apiUrl}/auth/login`, user)
       .pipe(
-        tap(response => {
+        tap((response: AuthResponse) => {
+          if (response.successful) {
+            this.sessionStorageService.setToken(response.result);
+            this.isAuthorized$$.next(true);
+          }
+        })
+      );
+  }
+
+  register(user: RegisterRequest): Observable<AuthResponse> {
+    return this.http
+      .post<AuthResponse>(`${this.apiUrl}/auth/register`, user)
+      .pipe(
+        tap((response: AuthResponse) => {
           if (response.successful) {
             this.sessionStorageService.setToken(response.result);
             this.isAuthorized$$.next(true);
@@ -59,18 +70,6 @@ export class AuthService {
   logout(): void {
     this.sessionStorageService.deleteToken();
     this.isAuthorized$$.next(false);
-  }
-
-  register(user: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, user)
-      .pipe(
-        tap(response => {
-          if (response.successful) {
-            this.sessionStorageService.setToken(response.result);
-            this.isAuthorized$$.next(true);
-          }
-        })
-      );
   }
 
   get isAuthorised(): boolean {

@@ -1,7 +1,6 @@
-// courses.service.ts
 import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { HttpClientWrapper } from './http-client-wrapper.service';
 
 interface Course {
   id: string;
@@ -24,7 +23,7 @@ export class CoursesService {
   private readonly apiUrl: string;
 
   constructor(
-    private http: HttpClient,
+    private http: HttpClientWrapper,
     @Optional() @Inject('API_URL') apiUrl?: string
   ) {
     this.apiUrl = apiUrl || 'http://localhost:4000/api';

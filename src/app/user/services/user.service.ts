@@ -1,6 +1,6 @@
 // user.service.ts
 import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClientWrapper } from '@app/services/http-client-wrapper.service';
 import { Observable } from 'rxjs';
 
 interface User {
@@ -17,7 +17,7 @@ export class UserService {
   private readonly apiUrl: string;
 
   constructor(
-    private http: HttpClient,
+    private http: HttpClientWrapper,
     @Optional() @Inject('API_URL') apiUrl?: string
   ) {
     this.apiUrl = apiUrl || 'http://localhost:4000/api';
