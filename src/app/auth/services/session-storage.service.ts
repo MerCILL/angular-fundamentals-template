@@ -1,4 +1,4 @@
-import { Injectable, Inject, Optional } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 
 const TOKEN = 'SESSION_TOKEN';
 
@@ -6,28 +6,17 @@ const TOKEN = 'SESSION_TOKEN';
   providedIn: 'root'
 })
 export class SessionStorageService {
-  private storage: Storage;
-  
-  constructor(@Optional() @Inject('Window') private window?: Window) {
-    this.storage = this.window?.sessionStorage || {
-      getItem: (key: string) => null,
-      setItem: (key: string, value: string) => {},
-      removeItem: (key: string) => {},
-      clear: () => {},
-      length: 0,
-      key: (index: number) => null
-    } as Storage;
-  }
+  constructor(@Inject('Window') private window: Window) {}
 
   setToken(token: string): void {
-    this.storage.setItem(TOKEN, token);
+    this.window.sessionStorage.setItem(TOKEN, token);
   }
 
   getToken(): string | null {
-    return this.storage.getItem(TOKEN);
+    return this.window.sessionStorage.getItem(TOKEN);
   }
 
   deleteToken(): void {
-    this.storage.removeItem(TOKEN);
+    this.window.sessionStorage.removeItem(TOKEN);
   }
 }
