@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Course, mockedCoursesList } from '../../shared/mocks/mocks';
+import { mockedCoursesList } from '../../shared/mocks/mocks';
+import { Course } from "@app/shared/mocks/course.interface";
 
 @Component({
   selector: 'app-courses',

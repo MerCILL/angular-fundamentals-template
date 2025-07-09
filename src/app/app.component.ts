@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Course, mockedCoursesList } from './shared/mocks/mocks';
+import { mockedCoursesList } from './shared/mocks/mocks';
+import { Course } from "./shared/mocks/course.interface";
 
 @Component({
   selector: 'app-root',

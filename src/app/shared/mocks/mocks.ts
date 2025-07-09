@@ -1,11 +1,4 @@
-export interface Course {
-  id: string;
-  title: string;
-  description: string;
-  duration: number;
-  authors: string[];
-  creationDate: string;
-}
+import { Course } from "./course.interface";
 
 export const mockedCoursesList: Course[] = [
   {

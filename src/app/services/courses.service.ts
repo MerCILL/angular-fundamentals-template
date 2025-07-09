@@ -1,20 +1,8 @@
 import { Injectable, Inject, Optional } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClientWrapper } from './http-client-wrapper.service';
-
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  creationDate: string;
-  duration: number;
-  authors: string[];
-}
-
-interface Author {
-  id: string;
-  name: string;
-}
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { Course } from '@app/shared/mocks/course.interface';
+import { Author } from '@app/shared/mocks/author.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +11,7 @@ export class CoursesService {
   private readonly apiUrl: string;
 
   constructor(
-    private http: HttpClientWrapper,
+    private http: HttpClient,
     @Optional() @Inject('API_URL') apiUrl?: string
   ) {
     this.apiUrl = apiUrl || 'http://localhost:4000/api';
@@ -45,8 +33,8 @@ export class CoursesService {
     return this.http.get<Course>(`${this.apiUrl}/courses/${id}`);
   }
 
-  deleteCourse(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/courses/${id}`);
+  deleteCourse(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/courses/${id}`);
   }
 
   filterCourses(value: string): Observable<Course[]> {

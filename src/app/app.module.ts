@@ -1,3 +1,4 @@
+// app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -18,7 +19,6 @@ import { UserService } from './user/services/user.service';
 import { UserStoreService } from './user/services/user-store.service';
 import { TokenInterceptor } from './auth/interceptors/token.interceptor';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientWrapper, HttpClientWrapperService } from './services/http-client-wrapper.service';
 
 @NgModule({
   declarations: [
@@ -58,12 +58,6 @@ import { HttpClientWrapper, HttpClientWrapperService } from './services/http-cli
     {
       provide: 'API_URL',
       useValue: 'http://localhost:4000/api'
-    },
-    
-    // HTTP Client Wrapper
-    {
-      provide: HttpClientWrapper,
-      useClass: HttpClientWrapperService
     },
     
     // HTTP Interceptor for token handling
