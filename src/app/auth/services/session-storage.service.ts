@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 
 const TOKEN = 'SESSION_TOKEN';
 
@@ -6,17 +6,25 @@ const TOKEN = 'SESSION_TOKEN';
   providedIn: 'root'
 })
 export class SessionStorageService {
-  constructor(@Inject('Window') private window: Window) {}
+  private readonly storage: Storage;
+
+  constructor(@Optional() @Inject('Window') private injectedWindow: Window) {
+    // Используем инжектированный window, если он доступен, иначе глобальный window
+    this.storage = this.injectedWindow?.sessionStorage || (typeof window !== 'undefined' ? window.sessionStorage : undefined);
+    if (!this.storage) {
+      throw new Error('SessionStorage is not available');
+    }
+  }
 
   setToken(token: string): void {
-    this.window.sessionStorage.setItem(TOKEN, token);
+    this.storage.setItem(TOKEN, token);
   }
 
   getToken(): string | null {
-    return this.window.sessionStorage.getItem(TOKEN);
+    return this.storage.getItem(TOKEN);
   }
 
   deleteToken(): void {
-    this.window.sessionStorage.removeItem(TOKEN);
+    this.storage.removeItem(TOKEN);
   }
 }
