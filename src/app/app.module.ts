@@ -54,6 +54,12 @@ import { AppRoutingModule } from './app-routing.module';
       useFactory: () => typeof window !== 'undefined' ? window : undefined
     },
     
+    // API URL provider
+    {
+      provide: 'API_URL',
+      useValue: 'http://localhost:4000/api'
+    },
+    
     // HTTP Interceptor for token handling
     {
       provide: HTTP_INTERCEPTORS,

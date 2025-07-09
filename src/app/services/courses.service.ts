@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+// courses.service.ts
+import { Injectable, Inject, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -20,9 +21,14 @@ interface Author {
   providedIn: 'root'
 })
 export class CoursesService {
-  private readonly apiUrl = 'http://localhost:4000/api';
+  private readonly apiUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Optional() @Inject('API_URL') apiUrl?: string
+  ) {
+    this.apiUrl = apiUrl || 'http://localhost:4000/api';
+  }
 
   getAll(): Observable<Course[]> {
     return this.http.get<Course[]>(`${this.apiUrl}/courses/all`);

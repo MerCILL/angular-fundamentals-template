@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+// auth.service.ts
+import { Injectable, Inject, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -25,14 +26,17 @@ interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:4000/api';
+  private readonly apiUrl: string;
   private isAuthorized$$ = new BehaviorSubject<boolean>(false);
   public isAuthorized$ = this.isAuthorized$$.asObservable();
 
   constructor(
     private http: HttpClient,
-    private sessionStorageService: SessionStorageService
+    private sessionStorageService: SessionStorageService,
+    @Optional() @Inject('API_URL') apiUrl?: string
   ) {
+    this.apiUrl = apiUrl || 'http://localhost:4000/api';
+    
     // Check if user is already authorized on service initialization
     const token = this.sessionStorageService.getToken();
     if (token) {

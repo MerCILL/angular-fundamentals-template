@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+// user.service.ts
+import { Injectable, Inject, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -13,9 +14,14 @@ interface User {
   providedIn: 'root'
 })
 export class UserService {
-  private readonly apiUrl = 'http://localhost:4000/api';
+  private readonly apiUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Optional() @Inject('API_URL') apiUrl?: string
+  ) {
+    this.apiUrl = apiUrl || 'http://localhost:4000/api';
+  }
 
   getUser(): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/users/me`);
