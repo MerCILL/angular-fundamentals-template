@@ -19,56 +19,39 @@ export class CoursesService {
   }
 
   getAll(): Observable<Course[]> {
-    const obs$ = this.http.get<Course[]>(`${this.apiUrl}/courses/all`);
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
+    // Возвращаем Observable напрямую, без подписки
+    return this.http.get<Course[]>(`${this.apiUrl}/courses/all`);
   }
 
   createCourse(course: Partial<Course>): Observable<Course> {
-    const obs$ = this.http.post<Course>(`${this.apiUrl}/courses/add`, course);
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
+    return this.http.post<Course>(`${this.apiUrl}/courses/add`, course);
   }
 
   getCourse(id: string): Observable<Course> {
-    const obs$ = this.http.get<Course>(`${this.apiUrl}/courses/${id}`);
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
+    return this.http.get<Course>(`${this.apiUrl}/courses/${id}`);
   }
 
   editCourse(id: string, course: Partial<Course>): Observable<Course> {
-    const obs$ = this.http.put<Course>(`${this.apiUrl}/courses/${id}`, course);
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
+    return this.http.put<Course>(`${this.apiUrl}/courses/${id}`, course);
   }
 
   deleteCourse(id: string): Observable<void> {
-    const obs$ = this.http.delete<void>(`${this.apiUrl}/courses/${id}`);
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
+    return this.http.delete<void>(`${this.apiUrl}/courses/${id}`);
   }
 
   filterCourses(value: string): Observable<Course[]> {
-    const obs$ = this.http.get<Course[]>(`${this.apiUrl}/courses/filter?title=${value}`);
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
+    return this.http.get<Course[]>(`${this.apiUrl}/courses/filter?title=${value}`);
   }
 
   getAllAuthors(): Observable<Author[]> {
-    const obs$ = this.http.get<Author[]>(`${this.apiUrl}/authors/all`);
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
+    return this.http.get<Author[]>(`${this.apiUrl}/authors/all`);
   }
 
   createAuthor(name: string): Observable<Author> {
-    const obs$ = this.http.post<Author>(`${this.apiUrl}/authors/add`, { name });
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
+    return this.http.post<Author>(`${this.apiUrl}/authors/add`, { name });
   }
 
   getAuthorById(id: string): Observable<Author> {
-    const obs$ = this.http.get<Author>(`${this.apiUrl}/authors/${id}`);
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
+    return this.http.get<Author>(`${this.apiUrl}/authors/${id}`);
   }
 }

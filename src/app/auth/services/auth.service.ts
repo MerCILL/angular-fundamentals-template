@@ -1,4 +1,3 @@
-// src/app/auth/services/auth.service.ts
 import { Injectable, Inject, Optional } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -43,7 +42,7 @@ export class AuthService {
   }
 
   login(user: LoginRequest): Observable<AuthResponse> {
-    const obs$ = this.http
+    return this.http
       .post<AuthResponse>(`${this.apiUrl}/auth/login`, user)
       .pipe(
         tap(response => {
@@ -53,12 +52,10 @@ export class AuthService {
           }
         })
       );
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
   }
 
   register(user: RegisterRequest): Observable<AuthResponse> {
-    const obs$ = this.http
+    return this.http
       .post<AuthResponse>(`${this.apiUrl}/auth/register`, user)
       .pipe(
         tap(response => {
@@ -68,8 +65,6 @@ export class AuthService {
           }
         })
       );
-    obs$.subscribe({ next: () => {}, error: () => {} });
-    return obs$;
   }
 
   logout(): void {
