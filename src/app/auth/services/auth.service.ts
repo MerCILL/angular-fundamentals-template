@@ -1,7 +1,8 @@
+// src/app/auth/services/auth.service.ts
 import { Injectable, Inject, Optional } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap, finalize } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { SessionStorageService } from './session-storage.service';
 
 export interface LoginRequest {
@@ -42,32 +43,38 @@ export class AuthService {
   }
 
   login(user: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, user).pipe(
-      tap(response => {
-        if (response.successful) {
-          this.sessionStorageService.setToken(response.result);
-          this.isAuthorized$$.next(true);
-        }
-      }),
-      finalize(() => {})
-    );
+    const obs$ = this.http
+      .post<AuthResponse>(`${this.apiUrl}/auth/login`, user)
+      .pipe(
+        tap(response => {
+          if (response.successful) {
+            this.sessionStorageService.setToken(response.result);
+            this.isAuthorized$$.next(true);
+          }
+        })
+      );
+    obs$.subscribe({ next: () => {}, error: () => {} });
+    return obs$;
+  }
+
+  register(user: RegisterRequest): Observable<AuthResponse> {
+    const obs$ = this.http
+      .post<AuthResponse>(`${this.apiUrl}/auth/register`, user)
+      .pipe(
+        tap(response => {
+          if (response.successful) {
+            this.sessionStorageService.setToken(response.result);
+            this.isAuthorized$$.next(true);
+          }
+        })
+      );
+    obs$.subscribe({ next: () => {}, error: () => {} });
+    return obs$;
   }
 
   logout(): void {
     this.sessionStorageService.deleteToken();
     this.isAuthorized$$.next(false);
-  }
-
-  register(user: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/register`, user).pipe(
-      tap(response => {
-        if (response.successful) {
-          this.sessionStorageService.setToken(response.result);
-          this.isAuthorized$$.next(true);
-        }
-      }),
-      finalize(() => {})
-    );
   }
 
   get isAuthorised(): boolean {

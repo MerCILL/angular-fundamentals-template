@@ -1,7 +1,7 @@
+// src/app/auth/services/user.service.ts
 import { Injectable, Inject, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
 
 export interface User {
   id: string;
@@ -24,8 +24,8 @@ export class UserService {
   }
 
   getUser(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/users/me`).pipe(
-      finalize(() => {})
-    );
+    const obs$ = this.http.get<User>(`${this.apiUrl}/users/me`);
+    obs$.subscribe({ next: () => {}, error: () => {} });
+    return obs$;
   }
 }
